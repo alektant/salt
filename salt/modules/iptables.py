@@ -274,6 +274,16 @@ def build_rule(table='filter', chain=None, command=None, position='', full=None,
         rule.append('{0}--match-set {1}'.format(maybe_add_negation('set'), kwargs['set']))
         del kwargs['set']
 
+    # Allows string matching to take place.
+    if 'string' in kwargs and kwargs['string']:
+        rule.append('-m string --string "{0}"'.format(kwargs['string']))
+        del kwargs['string']
+
+    # Allow reading marked packets
+    if 'mark' in kwargs and kwargs['mark']:
+        rule.append('-m mark --mark {0}'.format(kwargs['mark']))
+        del kwargs['mark']
+
     # Jumps should appear last, except for any arguments that are passed to
     # jumps, which of course need to follow.
     after_jump = []
